@@ -19,12 +19,14 @@ This repository contains the official implementation of the NeurIPS 2025 paper *
 ### Setup
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/huangcb01/lookahead-routing.git
 cd lookahead-routing
 ```
 
 2. Install required Python packages:
+
 ```bash
 pip install torch transformers datasets accelerate deepspeed fire
 pip install flash-attn  # Optional, for flash attention support
@@ -45,6 +47,7 @@ bash decompress_data.sh
 ```
 
 This will extract the data to the `data` directory with the following structure:
+
 - `data/train/`: Training datasets (UltraFeedback, OpenMathInstruct2, SelfOSSInstruct)
 - `data/test/`: Test datasets (AlpacaEval, ArenaHard, MT-Bench, GSM8k, MATH, HumanEval, MBPP)
 
@@ -57,6 +60,7 @@ bash generate_responses.sh
 ```
 
 Edit the script to specify:
+
 - `MODEL_PATH`: Path to the LLM model
 - `DATA_PATH`: Path to input instructions
 - `OUTPUT_PATH`: Where to save generated responses
@@ -70,6 +74,7 @@ bash compute_reward.sh
 ```
 
 Edit the script to specify:
+
 - `MODEL_NAME_OR_PATH`: Reward model to use (e.g., Skywork-Reward-Gemma-2-27B-v0.2)
 - `DATA_DIR`: Directory containing responses
 - `LLMS`: List of LLMs to evaluate
@@ -87,6 +92,7 @@ bash lookahead_clm.sh
 ```
 
 Key configurations:
+
 - `MODEL_PATH`: Backbone model (e.g., HuggingFaceTB/SmolLM2-135M)
 - `TRAIN_SETS`: Training datasets to use
 - `TEST_SETS`: Test datasets for evaluation
@@ -103,6 +109,7 @@ bash lookahead_mlm.sh
 ```
 
 Key configurations:
+
 - `MODEL_PATH`: Backbone model (e.g., answerdotai/ModernBERT-base)
 - `MASK_TYPE`: Masking strategy (random or right)
 - `MASK_LENGTH`: Length of masked region
@@ -139,6 +146,7 @@ bash baselines.sh
 ```
 
 This will evaluate:
+
 - **Oracle**: Always selects the best LLM (upper bound)
 - **Fixed**: Always uses a specific LLM
 - **Random**: Randomly selects an LLM
@@ -155,34 +163,6 @@ python src/eval_baseline.py \
     --test_datasets "['dataset1', 'dataset2', ...]" \
     --output_dir output/eval
 ```
-
-## Configuration
-
-### Model Configuration
-
-Edit the shell scripts to configure:
-
-- **Backbone Models**: Choose from SmolLM, ModernBERT, or other models
-- **Candidate LLMs**: Specify which LLMs to route between
-- **Training Parameters**: Batch size, learning rate, epochs, etc.
-
-### DeepSpeed Configuration
-
-For multi-GPU training, DeepSpeed configurations are available in `config/deepspeed/`:
-- `ds_z0_config.json`: ZeRO Stage 0
-- `ds_z2_config.json`: ZeRO Stage 2
-- `ds_z3_config.json`: ZeRO Stage 3
-
-Uncomment the DeepSpeed line in training scripts to enable:
-```bash
-ADDITIONAL_ARGS="$ADDITIONAL_ARGS --deepspeed config/deepspeed/ds_z3_config.json"
-```
-
-### Accelerate Configuration
-
-FSDP and Accelerate configurations are available in `config/`:
-- `fsdp.yaml`: Fully Sharded Data Parallel configuration
-- `accelerate.yaml`: Accelerate configuration
 
 ## Project Structure
 
@@ -209,58 +189,6 @@ FSDP and Accelerate configurations are available in `config/`:
 ├── compute_reward.sh        # Reward computation script
 ├── baselines.sh             # Baseline evaluation script
 └── README.md                # This file
-```
-
-## Training Arguments
-
-Common training arguments in `src/train.py`:
-
-- `--backbone_name_or_path`: Pretrained model to use as backbone
-- `--data_dir`: Directory containing training data
-- `--train_datasets`: List of training datasets
-- `--test_datasets`: List of test datasets
-- `--candidate_llms`: List of candidate LLMs for routing
-- `--loss_type`: Loss function (BCE, KL)
-- `--max_length`: Maximum sequence length
-- `--per_device_train_batch_size`: Batch size per device
-- `--learning_rate`: Learning rate
-- `--num_train_epochs`: Number of training epochs
-- `--output_dir`: Directory to save model checkpoints
-
-See `src/args.py` for the complete list of arguments.
-
-## Advanced Options
-
-### Flash Attention
-
-Enable Flash Attention 2 for faster training:
-```bash
-ADDITIONAL_ARGS="$ADDITIONAL_ARGS --attn_implementation flash_attention_2"
-```
-
-### Gradient Checkpointing
-
-Enable gradient checkpointing to reduce memory usage:
-```bash
-ADDITIONAL_ARGS="$ADDITIONAL_ARGS --gradient_checkpointing"
-```
-
-### Liger Kernel
-
-Use Liger kernel for memory-efficient training:
-```bash
-ADDITIONAL_ARGS="$ADDITIONAL_ARGS --use_liger"
-```
-
-## Output
-
-Training outputs are saved to the `output` directory with the following structure:
-```
-output/<train_sets>/<config>/<model>/<method>/<hyperparams>/
-├── train.log                 # Training logs
-├── train.sh                  # Copy of training script
-├── checkpoint-*/             # Model checkpoints
-└── eval_results.json         # Evaluation results
 ```
 
 ## Citation
