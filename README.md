@@ -1,10 +1,10 @@
 # Lookahead Routing for Large Language Models
 
-This repository contains the official implementation of the NeurIPS 2025 paper **"Lookahead Routing for Large Language Models"**.
+This repository contains the official implementation of the NeurIPS 2025 paper **"[Lookahead Routing for Large Language Models](https://arxiv.org/abs/2510.19506)"**.
 
 ## Overview
 
-Lookahead Routing is a method for intelligently routing queries to different Large Language Models (LLMs) based on predicted performance. The approach trains small router models that can efficiently predict which LLM will perform best for a given query, enabling efficient and effective model selection.
+**Lookahead** is a routing framework that "foresees" potential model outputs by predicting their latent representations and uses these predictions to guide model selection, thus enabling more informed routing without full inference. Within this framework, we implement two approaches based on causal and masked language models. Empirical evaluations across seven public benchmarks — spanning instruction following, mathematical reasoning, and code generation — show that Lookahead consistently outperforms existing routing baselines, achieving an average performance gain of 7.7% over the state-of-the-art.
 
 ## Installation
 
@@ -270,7 +270,7 @@ If you use this code in your research, please cite:
 ```bibtex
 @inproceedings{huang2025lookahead,
   title={Lookahead Routing for Large Language Models},
-  author={Huang, Canbin and others},
+  author={Canbin Huang and Tianyuan Shi and Yuhua Zhu and Ruijun Chen and Xiaojun Quan},
   booktitle={Advances in Neural Information Processing Systems},
   year={2025}
 }
