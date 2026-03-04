@@ -29,20 +29,12 @@ done
 
 ROUTER_TYPE=random
 for i in 1 2 3; do
-    OUTPUT_DIR="output/${VERSION}/${ROUTER_TYPE}/${i}"
-    python src/eval.py \
+    python src/eval_baseline.py \
         --router_type $ROUTER_TYPE \
         --candidate_llms "$CANDIDATE_LLMS" \
-        --datasets "['Skywork-Reward-Gemma-2-27B-v0.2']" \
-        --data_dir data/train/UltraFeedback \
-        --output_dir $OUTPUT_DIR/valid \
-        --eval_ids_path data/train/UltraFeedback/eval_ids.json &
-    python src/eval.py \
-        --router_type $ROUTER_TYPE \
-        --candidate_llms "$CANDIDATE_LLMS" \
-        --datasets $DATASETS \
-        --data_dir data/test \
-        --output_dir $OUTPUT_DIR/test &
+        --data_dir $DATA_DIR \
+        --test_datasets "$TEST_SETS" \
+        --output_dir $OUTPUT_DIR/$ROUTER_TYPE/$i &
 done
 
 wait

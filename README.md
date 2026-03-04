@@ -28,9 +28,9 @@ cd lookahead-routing
 2. Install required Python packages:
 
 ```bash
-pip install torch transformers datasets accelerate deepspeed fire
+conda create -n lookahead python=3.12
+pip install torch transformers datasets accelerate deepspeed fire scikit-learn matplotlib vllm
 pip install flash-attn  # Optional, for flash attention support
-pip install vllm  # Optional, for vLLM inference engine
 pip install liger-kernel  # Optional, for memory-efficient training
 ```
 
